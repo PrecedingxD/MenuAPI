@@ -1,6 +1,8 @@
 # MenuAPI
 Lightweight Asynchronous Menu API for all versions made in Kotlin
 
+### This really is just to use in my own projects, use this if you want.
+
 ## How To Utilize in Your Project
 
 You have to initialize the API by using MenuAPI#register. Here's an example preset for 1.8.
@@ -22,7 +24,7 @@ You have to initialize the API by using MenuAPI#register. Here's an example pres
                     )))
                     .build(),
                 nextPageItem = ItemBuilder.of(Material.MELON)
-                    .name("&cPrevious Page &7({previousPage}/{maxPages})")
+                    .name("&cPrevious Page &7(&e{previousPage}&7/&e{maxPages}&7)")
                     .setLore(CC.translate(mutableListOf(
                         "&7Click to navigate to",
                         "&7the previous page.",
