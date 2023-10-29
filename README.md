@@ -22,7 +22,7 @@ You have to initialize the API by using MenuAPI#register. Here's an example pres
                     )))
                     .build(),
                 nextPageItem = ItemBuilder.of(Material.MELON)
-                    .name("&cPrevious Page &7({previousPage}/{maxPages})")
+                    .name("&cPrevious Page &7(&e{previousPage}&7/&e{maxPages}&7)")
                     .setLore(CC.translate(mutableListOf(
                         "&7Click to navigate to",
                         "&7the previous page.",
