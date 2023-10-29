@@ -58,11 +58,7 @@ abstract class PaginatedMenu(
         return availableSlots
     }
 
-    fun open(player: Player) {
-        open(player, false)
-    }
-
-    fun open(player: Player, checkIfClosed: Boolean) {
+    fun open(player: Player, checkIfClosed: Boolean = false) {
         val buttons = getButtons(player)
         maxPages = if (buttons.isEmpty()) 1 else ceil(buttons.size / getMaximumItemsPerPage().toDouble()).toInt()
         val openInventory = player.openInventory.topInventory
@@ -75,11 +71,7 @@ abstract class PaginatedMenu(
         }
     }
 
-    fun openSync(player: Player) {
-        openSync(player, false)
-    }
-
-    fun openSync(player: Player, checkIfClosed: Boolean) {
+    fun openSync(player: Player, checkIfClosed: Boolean = false) {
         val buttons = getButtons(player)
         maxPages = if (buttons.isEmpty()) 1 else ceil(buttons.size / getMaximumItemsPerPage().toDouble()).toInt()
         createInventory(player, checkIfClosed, false) {
