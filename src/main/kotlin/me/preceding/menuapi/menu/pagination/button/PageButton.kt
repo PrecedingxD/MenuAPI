@@ -55,9 +55,9 @@ class PageButton(
                 }
                 menu.page += mod
                 menu.open(player)
-                if (mod >= 1) {
+                if (mod == 1) {
                     MenuAPI.soundOptions.nextPageSound.play(player)
-                } else if (mod < 1) {
+                } else if (mod == -1) {
                     MenuAPI.soundOptions.previousPageSound.play(player)
                 }
             } ClickType.RIGHT -> {
