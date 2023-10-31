@@ -22,6 +22,10 @@ abstract class Menu(
 
     abstract fun getButtons(player: Player): MutableMap<Int, Button>
 
+    fun open(player: Player) {
+        open(player, false)
+    }
+
     fun open(player: Player, checkIfClosed: Boolean = false) {
         val openInventory = player.openInventory.topInventory
         createInventory(player, checkIfClosed) {
