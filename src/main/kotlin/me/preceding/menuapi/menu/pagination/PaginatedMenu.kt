@@ -58,6 +58,10 @@ abstract class PaginatedMenu(
         return availableSlots
     }
 
+    fun open(player: Player) {
+        open(player, false)
+    }
+
     fun open(player: Player, checkIfClosed: Boolean = false) {
         val buttons = getButtons(player)
         maxPages = if (buttons.isEmpty()) 1 else ceil(buttons.size / getMaximumItemsPerPage().toDouble()).toInt()
@@ -69,6 +73,10 @@ abstract class PaginatedMenu(
                 MenuController.paginatedMenuMap[player.uniqueId] = this
             }
         }
+    }
+
+    fun openSync(player: Player) {
+        openSync(player, false)
     }
 
     fun openSync(player: Player, checkIfClosed: Boolean = false) {
