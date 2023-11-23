@@ -23,9 +23,11 @@ abstract class PaginatedMenu(
     var autoUpdate = true
 
     init {
-        if (size % 9 != 0) throw IllegalArgumentException("Menus must have a size that can be divided by 9.")
-        if (size < 27) throw IllegalArgumentException("Paginated menus must have a size of at least 27.")
-        if(size > 54) throw IllegalArgumentException("Menu sizes must be a maximum of 54 slots.")
+        if(size != -1) {
+            if (size % 9 != 0) throw IllegalArgumentException("Menus must have a size that can be divided by 9.")
+            if (size < 27) throw IllegalArgumentException("Paginated menus must have a size of at least 27.")
+            if (size > 54) throw IllegalArgumentException("Menu sizes must be a maximum of 54 slots.")
+        }
     }
 
     open fun getBorderSlots(): Array<Int> {
