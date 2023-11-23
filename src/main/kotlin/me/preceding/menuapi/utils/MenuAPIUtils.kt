@@ -5,7 +5,7 @@ import org.bukkit.inventory.Inventory
 
 object MenuAPIUtils {
 
-    val borderSlotsMap = mutableMapOf(
+    var borderSlotsMap = mutableMapOf(
 
         54 to arrayOf(
             0, 1, 2, 3, 4, 5, 6, 7, 8,
