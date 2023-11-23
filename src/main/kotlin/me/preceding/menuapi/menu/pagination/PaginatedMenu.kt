@@ -15,7 +15,7 @@ import kotlin.math.ceil
 
 abstract class PaginatedMenu(
     var title: String,
-    var size: Int
+    var size: Int = -1
 ) {
 
     var page = 1
@@ -94,6 +94,16 @@ abstract class PaginatedMenu(
         return hashMapOf()
     }
 
+    private fun calculateSize(buttons: MutableMap<Int, Button>) : Int {
+        var highest = 0
+        for(i in buttons.keys) {
+            if(i > highest) {
+                highest = i
+            }
+        }
+        return (ceil((highest + 1) / 9.0) * 9.0).toInt()
+    }
+
     fun getResolvedButtons(player: Player): MutableMap<Int, Button> {
         val buttons = getButtons(player)
         val toReturn = mutableMapOf<Int, Button>()
@@ -123,7 +133,7 @@ abstract class PaginatedMenu(
         function: (inventory: Inventory) -> Unit,
     ) {
         val inventory =
-            Bukkit.createInventory(null, size, ChatColor.translateAlternateColorCodes('&', MenuAPI.paginationOptions.paginationTitleFormat
+            Bukkit.createInventory(null, if(size == -1) calculateSize(getResolvedButtons(player)) else size, ChatColor.translateAlternateColorCodes('&', MenuAPI.paginationOptions.paginationTitleFormat
                 .replace("{currentPage}", page.toString())
                 .replace("{maxPages}", maxPages.toString())
                 .replace("{title}", title)
