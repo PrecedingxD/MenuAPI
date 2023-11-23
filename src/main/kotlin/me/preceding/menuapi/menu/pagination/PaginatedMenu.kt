@@ -31,6 +31,9 @@ abstract class PaginatedMenu(
     }
 
     open fun getBorderSlots(): Array<Int> {
+        if(!MenuAPIUtils.borderSlotsMap.contains(size)) {
+            throw IllegalArgumentException("Size not found in slots map: $size")
+        }
         return MenuAPIUtils.borderSlotsMap[size]!!
     }
 
