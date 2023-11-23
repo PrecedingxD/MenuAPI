@@ -9,13 +9,12 @@ import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
-import org.bukkit.inventory.ItemStack
 import java.util.concurrent.CompletableFuture
 import kotlin.math.ceil
 
 abstract class PaginatedMenu(
     var title: String,
-    var size: Int = -1
+    var size: Int
 ) {
 
     var page = 1
