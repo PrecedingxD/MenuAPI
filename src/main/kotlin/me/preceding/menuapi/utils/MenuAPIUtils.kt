@@ -52,6 +52,7 @@ object MenuAPIUtils {
 
     fun isSameInventory(inventory: Inventory?, compare: Inventory?) : Boolean {
         if(inventory == null || compare == null) return false
+        if(inventory.size != compare.size) return false
         for(i in 0 until inventory.size) {
             val inventoryItem = inventory.getItem(i)
             val compareItem = compare.getItem(i)

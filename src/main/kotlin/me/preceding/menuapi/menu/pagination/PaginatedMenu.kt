@@ -145,6 +145,7 @@ abstract class PaginatedMenu(
             ))
 
         val buttons = getResolvedButtons(player)
+        size = calculateSize(buttons)
         if(openAsync) {
             CompletableFuture.runAsync {
                 for (i in 0 until size) {
