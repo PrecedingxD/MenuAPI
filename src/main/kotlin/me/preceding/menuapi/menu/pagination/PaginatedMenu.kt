@@ -100,7 +100,7 @@ abstract class PaginatedMenu(
     }
 
     private fun calculateSize(buttons: MutableMap<Int, Button>) : Int {
-        var size = 0
+        var size = 9
         var count = 0
         for(i in 0 until buttons.size) {
             count++
@@ -109,7 +109,7 @@ abstract class PaginatedMenu(
                 size += 9
             }
         }
-        return if(size == 0) 9 else size
+        return if(size == 9) 18 else size
     }
 
     fun getResolvedButtons(player: Player): MutableMap<Int, Button> {
