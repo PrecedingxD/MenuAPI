@@ -18,6 +18,7 @@ abstract class Menu(
 
     init {
         if (size % 9 != 0) throw IllegalArgumentException("Menus must have a size that can be divided by 9.")
+        if(size > 54) throw IllegalArgumentException("Menu sizes must be a maximum of 54 slots.")
     }
 
     abstract fun getButtons(player: Player): MutableMap<Int, Button>
