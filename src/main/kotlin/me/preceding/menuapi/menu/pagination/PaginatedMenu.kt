@@ -100,13 +100,16 @@ abstract class PaginatedMenu(
     }
 
     private fun calculateSize(buttons: MutableMap<Int, Button>) : Int {
-        var highest = 0
-        for(i in buttons.keys) {
-            if(i > highest) {
-                highest = i
+        var size = 0
+        var count = 0
+        for(i in 0 until buttons.size) {
+            count++
+            if(count > 9) {
+                count = 0
+                size += 9
             }
         }
-        return (ceil((highest + 1) / 9.0) * 9.0).toInt()
+        return if(size == 0) 9 else size
     }
 
     fun getResolvedButtons(player: Player): MutableMap<Int, Button> {
@@ -137,15 +140,15 @@ abstract class PaginatedMenu(
         openAsync: Boolean,
         function: (inventory: Inventory) -> Unit,
     ) {
+        val buttons = getResolvedButtons(player)
+        size = calculateSize(buttons)
         val inventory =
-            Bukkit.createInventory(null, if(size == -1) calculateSize(getResolvedButtons(player)) else size, ChatColor.translateAlternateColorCodes('&', MenuAPI.paginationOptions.paginationTitleFormat
+            Bukkit.createInventory(null, size, ChatColor.translateAlternateColorCodes('&', MenuAPI.paginationOptions.paginationTitleFormat
                 .replace("{currentPage}", page.toString())
                 .replace("{maxPages}", maxPages.toString())
                 .replace("{title}", title)
             ))
 
-        val buttons = getResolvedButtons(player)
-        size = calculateSize(buttons)
         if(openAsync) {
             CompletableFuture.runAsync {
                 for (i in 0 until size) {
