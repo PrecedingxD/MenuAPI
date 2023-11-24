@@ -104,7 +104,7 @@ abstract class PaginatedMenu(
         var count = 0
         for(i in 0 until buttons.size) {
             count++
-            if(count >= 9) {
+            if(count == 9) {
                 count = 0
                 size += 9
             }
