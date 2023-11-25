@@ -71,6 +71,7 @@ abstract class PaginatedMenu(
             count++
             if(count >= 9) {
                 size += 9
+                count = 0
             }
         }
 
