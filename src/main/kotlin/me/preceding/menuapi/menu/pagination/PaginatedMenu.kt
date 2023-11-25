@@ -99,19 +99,6 @@ abstract class PaginatedMenu(
         return hashMapOf()
     }
 
-    private fun calculateSize(buttons: MutableMap<Int, Button>) : Int {
-        var size = 9
-        var count = 0
-        for(i in 0 until buttons.size) {
-            count++
-            if(count == 9) {
-                count = 0
-                size += 9
-            }
-        }
-        return if(size == 9) 18 else size
-    }
-
     fun getResolvedButtons(player: Player): MutableMap<Int, Button> {
         val buttons = getButtons(player)
         val toReturn = mutableMapOf<Int, Button>()
@@ -141,7 +128,7 @@ abstract class PaginatedMenu(
         function: (inventory: Inventory) -> Unit,
     ) {
         val buttons = getResolvedButtons(player)
-        size = calculateSize(buttons)
+        //size = calculateSize(buttons)
         val inventory =
             Bukkit.createInventory(null, size, ChatColor.translateAlternateColorCodes('&', MenuAPI.paginationOptions.paginationTitleFormat
                 .replace("{currentPage}", page.toString())
