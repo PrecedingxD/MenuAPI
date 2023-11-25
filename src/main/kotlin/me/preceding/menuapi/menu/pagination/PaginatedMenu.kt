@@ -40,7 +40,7 @@ abstract class PaginatedMenu(
 
     abstract fun getButtons(player: Player): MutableList<Button>
 
-    fun getMaximumItemsPerPage(): Int {
+    open fun getMaximumItemsPerPage(): Int {
         var maximumItems = 0
         val borderSlots = getBorderSlots()
         for (i in 0 until size) {
@@ -69,6 +69,9 @@ abstract class PaginatedMenu(
 
         for(i in 0 until buttons.size) {
             if(count == 9) {
+                if(size + 9 > getMaximumItemsPerPage()) {
+                    break
+                }
                 size += 9
                 count = 0
             }
