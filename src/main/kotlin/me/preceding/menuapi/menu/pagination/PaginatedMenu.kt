@@ -63,6 +63,20 @@ abstract class PaginatedMenu(
         return availableSlots
     }
 
+    fun calculateSize(buttons: MutableMap<Int, Button>) : Int {
+        var size = 9
+        var count = 0
+
+        for(i in 0 until buttons.size) {
+            count++
+            if(count >= 9) {
+                size += 9
+            }
+        }
+
+        return size
+    }
+
     fun open(player: Player) {
         open(player, false)
     }
@@ -128,7 +142,7 @@ abstract class PaginatedMenu(
         function: (inventory: Inventory) -> Unit,
     ) {
         val buttons = getResolvedButtons(player)
-        //size = calculateSize(buttons)
+        size = calculateSize(buttons)
         val inventory =
             Bukkit.createInventory(null, size, ChatColor.translateAlternateColorCodes('&', MenuAPI.paginationOptions.paginationTitleFormat
                 .replace("{currentPage}", page.toString())
