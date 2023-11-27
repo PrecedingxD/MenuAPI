@@ -21,6 +21,7 @@ publishing {
 
 repositories {
     mavenCentral()
+    mavenLocal()
     maven {
         url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
         content {
@@ -30,8 +31,15 @@ repositories {
     }
     maven { url = 'https://oss.sonatype.org/content/repositories/snapshots' }
     maven { url = 'https://oss.sonatype.org/content/repositories/central' }
+    maven { url 'https://repo.codemc.io/repository/maven-releases/' }
 }
 
 dependencies {
-    api 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
+    api 'ga.windpvp.windspigot:api:1.8.8-R0.2-SNAPSHOT'
+    implementation 'com.github.retrooper.packetevents:spigot:2.0.2'
+}
+
+shadowJar {
+    relocate "com.github.retrooper.packetevents", "me.preceding.menuapi.shaded.com.github.retrooper.packetevents"
+    relocate "io.github.retrooper.packetevents", "me.preceding.menuapi.shaded.io.github.retrooper.packetevents"
 }

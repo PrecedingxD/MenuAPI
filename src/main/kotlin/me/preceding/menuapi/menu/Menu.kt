@@ -12,7 +12,7 @@ import java.util.concurrent.CompletableFuture
 abstract class Menu(
     var title: String,
     var size: Int
-) {
+) : AbstractMenu() {
 
     var autoUpdate = true
 
@@ -23,15 +23,28 @@ abstract class Menu(
 
     abstract fun getButtons(player: Player): MutableMap<Int, Button>
 
+    override fun onCloseInternal(player: Player) {
+        onClose(player)
+    }
+
+    open fun onClose(player: Player) {
+
+    }
+
     fun open(player: Player) {
         open(player, false)
     }
 
     fun open(player: Player, checkIfClosed: Boolean = false) {
+        MenuController.open(player, this, checkIfClosed)
+    }
+
+    override fun openInternal(player: Player, checkIfClosed: Boolean) {
         val openInventory = player.openInventory.topInventory
         createInventory(player, checkIfClosed) {
             if(MenuAPIUtils.isSameInventory(openInventory, it)) return@createInventory
             Bukkit.getServer().scheduler.runTask(MenuAPI.plugin) {
+                //closedByMenu = true
                 player.openInventory(it)
                 MenuController.menuMap[player.uniqueId] = this
             }

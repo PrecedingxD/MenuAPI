@@ -8,7 +8,6 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
-import org.bukkit.event.player.AsyncPlayerChatEvent
 
 object MenuListener : Listener {
 
@@ -28,7 +27,11 @@ object MenuListener : Listener {
     @EventHandler
     fun onMenuClose(event: InventoryCloseEvent) {
         val player = event.player
+        val menu = MenuController.menuMap[player.uniqueId] ?: return
         MenuController.menuMap.remove(player.uniqueId)
+        if(event.isClosedByPlayer) {
+            menu.onClose(player as Player)
+        }
     }
 
     @EventHandler
@@ -47,7 +50,11 @@ object MenuListener : Listener {
     @EventHandler
     fun onPaginationClose(event: InventoryCloseEvent) {
         val player = event.player
+        val menu = MenuController.paginatedMenuMap[player.uniqueId] ?: return
         MenuController.paginatedMenuMap.remove(player.uniqueId)
+        if(event.isClosedByPlayer) {
+            menu.onClose(player as Player)
+        }
     }
 
 }

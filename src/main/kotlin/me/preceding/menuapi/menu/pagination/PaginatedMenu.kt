@@ -1,6 +1,7 @@
 package me.preceding.menuapi.menu.pagination
 
 import me.preceding.menuapi.MenuAPI
+import me.preceding.menuapi.menu.AbstractMenu
 import me.preceding.menuapi.menu.MenuController
 import me.preceding.menuapi.menu.button.Button
 import me.preceding.menuapi.menu.pagination.button.PageButton
@@ -15,24 +16,26 @@ import kotlin.math.ceil
 abstract class PaginatedMenu(
     var title: String,
     var size: Int
-) {
+) : AbstractMenu() {
 
     var page = 1
     var maxPages = 1
     var autoUpdate = true
 
     init {
-        if(size != -1) {
-            if (size % 9 != 0) throw IllegalArgumentException("Menus must have a size that can be divided by 9.")
-            if (size < 27) throw IllegalArgumentException("Paginated menus must have a size of at least 27.")
-            if (size > 54) throw IllegalArgumentException("Menu sizes must be a maximum of 54 slots.")
-        }
+        if (size % 9 != 0) throw IllegalArgumentException("Menus must have a size that can be divided by 9.")
+        if (size < 27) throw IllegalArgumentException("Paginated menus must have a size of at least 27.")
+    }
+
+    override fun onCloseInternal(player: Player) {
+        onClose(player)
+    }
+
+    open fun onClose(player: Player) {
+
     }
 
     open fun getBorderSlots(): Array<Int> {
-        if(!MenuAPIUtils.borderSlotsMap.contains(size)) {
-            throw IllegalArgumentException("Size not found in slots map: $size")
-        }
         return MenuAPIUtils.borderSlotsMap[size]!!
     }
 
@@ -53,6 +56,21 @@ abstract class PaginatedMenu(
         return maximumItems
     }
 
+    fun calculateSize(buttons: MutableMap<Int, Button>): Int {
+        val maxItems = buttons.filter { !getBorderSlots().contains(it.key) }.size
+        return if (maxItems <= 9) {
+            18
+        } else if (maxItems <= 18) {
+            27
+        } else if (maxItems <= 27) {
+            36
+        } else if (maxItems <= 36) {
+            45
+        } else if (maxItems <= 45) {
+            54
+        } else -1
+    }
+
     fun getAvailableSlots(): MutableList<Int> {
         val availableSlots = mutableListOf<Int>()
         val borderSlots = getBorderSlots()
@@ -63,42 +81,29 @@ abstract class PaginatedMenu(
         return availableSlots
     }
 
-    fun calculateSize(buttons: MutableMap<Int, Button>) : Int {
-        var size = 9
-        var count = 0
-
-        for(i in 0 until buttons.size) {
-            if(count == 9) {
-                if(size + 9 > getMaximumItemsPerPage()) {
-                    break
-                }
-                size += 9
-                count = 0
-            }
-            count++
-        }
-
-        return size
-    }
-
     fun open(player: Player) {
         open(player, false)
     }
 
     fun open(player: Player, checkIfClosed: Boolean = false) {
+        MenuController.open(player, this, checkIfClosed)
+    }
+
+    override fun openInternal(player: Player, checkIfClosed: Boolean) {
         val buttons = getButtons(player)
         maxPages = if (buttons.isEmpty()) 1 else ceil(buttons.size / getMaximumItemsPerPage().toDouble()).toInt()
         val openInventory = player.openInventory.topInventory
         createInventory(player, checkIfClosed, true) {
-            if(MenuAPIUtils.isSameInventory(openInventory, it)) return@createInventory
+            if (MenuAPIUtils.isSameInventory(openInventory, it)) return@createInventory
             Bukkit.getServer().scheduler.runTask(MenuAPI.plugin) {
+                //closedByMenu = true
                 player.openInventory(it)
                 MenuController.paginatedMenuMap[player.uniqueId] = this
             }
         }
     }
 
-    fun openSync(player: Player) {
+    /*fun openSync(player: Player) {
         openSync(player, false)
     }
 
@@ -107,11 +112,12 @@ abstract class PaginatedMenu(
         maxPages = if (buttons.isEmpty()) 1 else ceil(buttons.size / getMaximumItemsPerPage().toDouble()).toInt()
         createInventory(player, checkIfClosed, false) {
             Bukkit.getServer().scheduler.runTask(MenuAPI.plugin) {
+                closedByMenu = true
                 player.openInventory(it)
                 MenuController.paginatedMenuMap[player.uniqueId] = this
             }
         }
-    }
+    }*/
 
     open fun getOverheadItems(): MutableMap<Int, Button> {
         return hashMapOf()
@@ -146,15 +152,17 @@ abstract class PaginatedMenu(
         function: (inventory: Inventory) -> Unit,
     ) {
         val buttons = getResolvedButtons(player)
-        size = calculateSize(buttons)
         val inventory =
-            Bukkit.createInventory(null, size, ChatColor.translateAlternateColorCodes('&', MenuAPI.paginationOptions.paginationTitleFormat
-                .replace("{currentPage}", page.toString())
-                .replace("{maxPages}", maxPages.toString())
-                .replace("{title}", title)
-            ))
+            Bukkit.createInventory(
+                null, calculateSize(buttons), ChatColor.translateAlternateColorCodes(
+                    '&', MenuAPI.paginationOptions.paginationTitleFormat
+                        .replace("{currentPage}", page.toString())
+                        .replace("{maxPages}", maxPages.toString())
+                        .replace("{title}", title)
+                )
+            )
 
-        if(openAsync) {
+        if (openAsync) {
             CompletableFuture.runAsync {
                 for (i in 0 until size) {
                     val button = buttons[i] ?: continue

@@ -19,14 +19,14 @@ object MenuAPI {
         menuOptions: MenuOptions,
         paginationOptions: MenuPaginationOptions,
         soundOptions: MenuSoundOptions
-    ) : MenuAPI
-    {
+    ): MenuAPI {
         MenuAPI.plugin = plugin
         MenuAPI.menuOptions = menuOptions
         MenuAPI.paginationOptions = paginationOptions
         MenuAPI.soundOptions = soundOptions
         plugin.server.pluginManager.registerEvents(MenuListener, plugin)
         registerAutoUpdateTask()
+
         return this
     }
 
@@ -34,5 +34,6 @@ object MenuAPI {
         if (!menuOptions.autoUpdate) return
         plugin.server.scheduler.runTaskTimer(plugin, MenuAutoUpdateTask, 0L, menuOptions.autoUpdateTicks.toLong())
     }
+
 
 }

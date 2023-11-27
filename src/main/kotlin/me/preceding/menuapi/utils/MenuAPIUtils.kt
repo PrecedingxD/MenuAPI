@@ -1,7 +1,12 @@
 package me.preceding.menuapi.utils
 
+import me.preceding.menuapi.MenuAPI
+import me.preceding.menuapi.menu.MenuController
+import org.bukkit.Bukkit
 import org.bukkit.ChatColor
+import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
+import org.bukkit.metadata.FixedMetadataValue
 
 object MenuAPIUtils {
 
@@ -37,30 +42,38 @@ object MenuAPIUtils {
             18, 19, 20, 21, 22, 23, 24, 25, 26
         ),
 
-    )
+        )
 
-    fun translate(input: String) : String {
+    fun translate(input: String): String {
         return ChatColor.translateAlternateColorCodes('&', input)
     }
 
-    fun translate(input: MutableList<String>) : MutableList<String> {
-        for(i in 0 until input.size) {
+    fun translate(input: MutableList<String>): MutableList<String> {
+        for (i in 0 until input.size) {
             input[i] = translate(input[i])
         }
         return input
     }
 
-    fun isSameInventory(inventory: Inventory?, compare: Inventory?) : Boolean {
-        if(inventory == null || compare == null) return false
-        if(inventory.size != compare.size) return false
-        for(i in 0 until inventory.size) {
+    fun isSameInventory(inventory: Inventory?, compare: Inventory?): Boolean {
+        if (inventory == null || compare == null) return false
+        if (inventory.size != compare.size) return false
+        for (i in 0 until inventory.size) {
             val inventoryItem = inventory.getItem(i)
             val compareItem = compare.getItem(i)
-            if(inventoryItem != compareItem) {
+            if (inventoryItem != compareItem) {
                 return false
             }
         }
         return true
+    }
+
+    fun closeInventory(player: Player) {
+        player.closeInventory()
+    }
+
+    fun allowInventoryClose(player: Player) {
+        player.setMetadata("closedInventory", FixedMetadataValue(MenuAPI.plugin, true))
     }
 
 }
