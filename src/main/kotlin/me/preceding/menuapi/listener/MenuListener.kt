@@ -29,9 +29,6 @@ object MenuListener : Listener {
         val player = event.player
         val menu = MenuController.menuMap[player.uniqueId] ?: return
         MenuController.menuMap.remove(player.uniqueId)
-        if(event.isClosedByPlayer) {
-            menu.onClose(player as Player)
-        }
     }
 
     @EventHandler
@@ -52,9 +49,6 @@ object MenuListener : Listener {
         val player = event.player
         val menu = MenuController.paginatedMenuMap[player.uniqueId] ?: return
         MenuController.paginatedMenuMap.remove(player.uniqueId)
-        if(event.isClosedByPlayer) {
-            menu.onClose(player as Player)
-        }
     }
 
 }
